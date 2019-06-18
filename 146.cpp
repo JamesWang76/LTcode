@@ -5,6 +5,16 @@
 using namespace std;
 int capacity = 2;
 
+/**
+ * Q: Implement a LRU cache
+ * 
+ * 1. Using stack-like vector to implement it
+ *    - Evict the tail element(the longest not be used) in the vector
+ * 2. Remember that the value should be updated if the key is present in the cache 
+ */ 
+
+
+
 class LRUCache {
   public:
     vector<int> cache;
@@ -19,7 +29,7 @@ class LRUCache {
     int get(int key) {
         int V;
         auto it = table.find(key);
-        if (it == table.end() ) {
+        if (it == table.end()) {
             // cout <<"key "<< key << "get " << -1 << "\n";
             return -1;
         } else {
@@ -38,7 +48,6 @@ class LRUCache {
     void put(int key, int value) {
         map<int, int>::iterator iter;
         if (table.find(key) == table.end()) {
-            table[key] = value;
             if (coldCtr > 0) {
                 cache.insert(cache.begin(), key);
             } else {
@@ -48,7 +57,15 @@ class LRUCache {
                 cache.insert(cache.begin(), key);
             }
             coldCtr--;
+        } else {
+            auto IT = find(cache.begin(), cache.end(), key); // notice the return value from find function
+            int index = distance(cache.begin(), IT);
+            int beGet = cache[index];
+            cache.erase(cache.begin() + index);
+            cache.insert(cache.begin(), beGet);
+            // cout <<"key "<< key << "get " << table[key] << "\n";
         }
+        table[key] = value;
     }
 
     void printCache() {
@@ -78,13 +95,18 @@ int main() {
     LRUCache cache = LRUCache(capacity);
     // int param_1 = obj->get(key);
     cache.put(2, 1);
-    cache.put(2, 2);
-    cache.get(2);    // returns -1 (not found)
-    cache.put(1, 1); // evicts key 2
-    cache.put(4, 1); // evicts key 1
-    cache.get(2);    // returns -1 (not found)
-    // cache.printCache();
-    // cache.printTable();
+    cache.put(1, 1);
+    cache.put(2, 3);
+    cache.put(4, 1);
+    cache.get(1);
+    cache.get(2);
+    // cache.get(2);    // returns -1 (not found)
+    cache.printCache();
+    cache.printTable();
+    // cache.put(1, 1); // evicts key 2
+    // cache.put(4, 1); // evicts key 1
+    // cache.get(2);    // returns -1 (not found)
 
-    
+    // ["LRUCache","put","put","put","put","get","get"]
+    // [[2],[2,1],[1,1],[2,3],[4,1],[1],[2]]
 }
