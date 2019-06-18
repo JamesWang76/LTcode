@@ -11,8 +11,13 @@ int capacity = 2;
  * 1. Using stack-like vector to implement it
  *    - Evict the tail element(the longest not be used) in the vector
  * 2. Remember that the value should be updated if the key is present in the cache 
+ * 3. This code's memory usage is pretty low, however, it spends too long time
  */ 
 
+/**
+ * TODO:
+ *    - Think how to speed up the program (the operations should in time O(1))
+ */ 
 
 
 class LRUCache {
