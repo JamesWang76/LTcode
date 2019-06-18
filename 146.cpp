@@ -3,32 +3,51 @@
 #include <string>
 #include <vector>
 using namespace std;
-int capacity = 4;
+int capacity = 2;
 
 class LRUCache {
   public:
     vector<int> cache;
     map<int, int> table;
     int coldCtr;
+    int CAPACITY;
     LRUCache(int capacity) {
         coldCtr = capacity;
+        CAPACITY = capacity;
     }
 
     int get(int key) {
-        return 0;
+        int V;
+        auto it = table.find(key);
+        if (it == table.end() ) {
+            // cout <<"key "<< key << "get " << -1 << "\n";
+            return -1;
+        } else {
+            // find() returns a pointer pointing to the node which equals to the key.
+            // So, *iterator is a list whose head is equals to the key.
+            auto IT = find(cache.begin(), cache.end(), key); // notice the return value from find function
+            int index = distance(cache.begin(), IT);
+            int beGet = cache[index];
+            cache.erase(cache.begin() + index);
+            cache.insert(cache.begin(), beGet);
+            // cout <<"key "<< key << "get " << table[key] << "\n";
+            return table[key];
+        }
     }
 
     void put(int key, int value) {
-        coldCtr--;
         map<int, int>::iterator iter;
         if (table.find(key) == table.end()) {
             table[key] = value;
-            if (coldCtr >= 0) {
+            if (coldCtr > 0) {
                 cache.insert(cache.begin(), key);
             } else {
+                // cout << "evict key: " << cache[CAPACITY - 1] << "\n";
                 cache.erase(cache.end() - 1);
+                table.erase(cache[CAPACITY - 1]);
                 cache.insert(cache.begin(), key);
             }
+            coldCtr--;
         }
     }
 
@@ -56,19 +75,16 @@ int main() {
      */
 
     int key, value;
-    LRUCache *obj = new LRUCache(capacity);
+    LRUCache cache = LRUCache(capacity);
     // int param_1 = obj->get(key);
-    obj->put(1, 1);
-    obj->put(2, 2);
-    obj->put(3, 3);
-    obj->printCache();
-    obj->put(3, 2);
-    obj->put(4, 6);
-    obj->printCache();
-    obj->put(7, 6);
-    obj->printCache();
-    obj->put(9, 6);
-    obj->printCache();
-    // obj->printTable();
+    cache.put(2, 1);
+    cache.put(2, 2);
+    cache.get(2);    // returns -1 (not found)
+    cache.put(1, 1); // evicts key 2
+    cache.put(4, 1); // evicts key 1
+    cache.get(2);    // returns -1 (not found)
+    // cache.printCache();
+    // cache.printTable();
 
+    
 }
