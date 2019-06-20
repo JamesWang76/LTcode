@@ -6,63 +6,48 @@ using namespace std;
 string largestNumber(vector<int> &nums);
 string getStringVec(int maxDigit, vector<int> &nums, vector<pair<int, int>> dataInfo);
 
+/**
+ * The newest way:
+ *  - Compare the combine-string value and sort it
+ *      - LR vs. RL, which L=left word and R=right word
+ *      - L=12, R=34 => LR=1234
+ * 
+ * The original way: 
+ *  - Get the largest digit of all words -> maxDigit
+ *  - Fill every word to meet the maxDigit by repeat it
+ *      - (12, 55527, 432) => (12121, 55527, 43243)
+ *  - Bug: (121, 12) => (121, 121)
+*/
+
 struct comp {
     template <typename T>
     bool operator()(const T &l, const T &r) const {
-        return l > r;
+        string LR, RL;
+        LR = to_string(l)+to_string(r);
+        RL = to_string(r)+to_string(l);
+        cout<<"LR: "<<LR<<"\n";
+        cout<<"RL: "<<RL<<"\n";
+        if(LR > RL){
+            return true;
+        }else{
+            return false;
+        }
     }
 };
 
 int main() {
-    vector<int> x = {10, 2};
-    // 31131
-    // 31311
+    vector<int> x = {3,30,34,5,9};
     cout << largestNumber(x);
 }
 
 string largestNumber(vector<int> &nums) {
-    int maxDigit = 0;
-    vector<pair<int, int>> dataInfo;
-    for (int i = 0; i < nums.size(); i++) {
-        int tmpDigit = 0;
-        int tmpValue = nums[i];
-        while (tmpValue != 0) {
-            tmpValue /= 10;
-            tmpDigit++;
-        }
-        pair<int, int> tmpData;
-        tmpData.first = nums[i];
-        tmpData.second = tmpDigit;
-        dataInfo.push_back(tmpData);
-        if (tmpDigit > maxDigit)
-            maxDigit = tmpDigit;
+    sort(nums.begin(), nums.end(), comp());
+    string ans="";
+    for(int i=0;i<nums.size();i++){
+        ans += to_string(nums[i]);
     }
-    return getStringVec(maxDigit, nums, dataInfo);
-}
-
-string getStringVec(int maxDigit, vector<int> &nums, vector<pair<int, int>> dataInfo) {
-    vector<pair<string, int>> stringVec;
-    string ans = "";
-    for (int i = 0; i < nums.size(); i++) {
-        // cout<<dataInfo[i].first<<" "<<dataInfo[i].second<<"\n";
-        string x = to_string(dataInfo[i].first);
-        int q, rmd;
-        q = maxDigit / dataInfo[i].second;
-        rmd = maxDigit % dataInfo[i].second;
-        for (int i = 0; i < q - 1; i++) {
-            x += x;
-        }
-        for (int i = 0; i < rmd; i++) {
-            x += x[i];
-        }
-        pair<string, int> tmpData;
-        tmpData.first = x;
-        tmpData.second = dataInfo[i].first;
-        stringVec.push_back(tmpData);
-    }
-    sort(stringVec.begin(), stringVec.end(), comp());
-    for (int i = 0; i < stringVec.size(); i++) {
-        ans += to_string(stringVec[i].second);
+    while((ans[0] == '0') && ans.size() > 1){
+        ans = ans.substr(1, ans.size());
     }
     return ans;
 }
