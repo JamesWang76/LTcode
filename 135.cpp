@@ -12,10 +12,10 @@ int main() {
 int candy(vector<int> &ratings) {
     int arr[ratings.size()], ans = 0, minValue = 0;
     memset(arr, 0, ratings.size() * sizeof(int));
-    for (int i = 1; i < ratings.size(); i++) {
-        if (ratings[i] > ratings[i - 1]) {
+    for (int i = 1; i < ratings.size() - 1; i++) {
+        if (ratings[i] > ratings[i - 1] || ratings[i] > ratings[i + 1]) {
             arr[i] = arr[i - 1] + 1;
-        } else if (ratings[i] < ratings[i - 1]) {
+        } else if (ratings[i] < ratings[i - 1] || ratings[i] < ratings[i + 1]) {
             arr[i] = arr[i - 1] - 1;
         }
         if (minValue > arr[i]) {
