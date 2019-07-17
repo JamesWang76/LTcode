@@ -1,4 +1,4 @@
-main:82.cpp
-	g++ -o main 82.cpp -std=c++11
+main:134.cpp
+	g++ -o main 134.cpp -std=c++11
 clear:
 	rm main
