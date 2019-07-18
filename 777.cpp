@@ -3,48 +3,55 @@
 #include <vector>
 using namespace std;
 
+/**
+ * Return two string is the same or not
+ *      - The sub-string "XL" could be replaced to "LX", "XR" -> "RX"
+ * 
+ * The better way:
+ *      - Using the stack concept to solve it.
+ *      - Left stack and Right stack
+ *          1. XX  => means I create the 2 space for left stack
+ *             LL
+ *          2. LL  => means there are two "left elements" ready to push into the "left stack"
+ *             XX
+ *                   EX: 
+ *                      XXX(LL)XX(RR)X
+ *                      (LL)XXXXXX(RR)
+ *          3. L   => means there is a wall blocking the "right elements" ready to insert into the stack
+ *             L
+ *                   EX:
+ *                      RRLXX
+ *                      XXLRR
+ * 
+ *      - Return false if the stack size isn't enough
+ * 
+ * The bad way:
+ *      - Handle the all possible cases
+ */ 
+
 bool canTransform(string start, string end);
 int main() {
     string start, end;
-    start = "XLXRRXXRXX";
-    end = "LXXXXXXRRR";
-
-    // RXXLRXRXL
-    // XRLXXRRLX
+    start = "LLR";
+    end =   "RRL";
     cout << canTransform(start, end);
 }
 bool canTransform(string start, string end) {
     int i;
-    char propagationChar = '\0';
-    bool propagating = false;
+    int right=0, left=0;
     for (i = 0; i < start.size(); i++) {
-        if ((start[i] == 'R' && end[i] == 'X') || (start[i] == 'X' && end[i] == 'L')) {
-            if (propagating) return false;
-            propagating = true;
-            if (start[i] == 'R' && end[i] == 'X') {
-                propagationChar = 'R';
-            } else {
-                propagationChar = 'L';
-            }
-        } else if ((start[i] == 'R' && end[i] == 'L') || (start[i] == 'L' && end[i] == 'R')) {
+        if(right < 0 || left < 0)return false;
+        if(start[i] == 'X' && end[i]=='L')left++;
+        else if(start[i] == 'L' && end[i]=='X') left--;
+        else if(start[i] == 'R' && end[i]=='X') right++;
+        else if(start[i] == 'X' && end[i]=='R') right--;
+        else if(start[i] == end[i]){
+            if(start[i] == 'X')continue;
+            if(start[i] == 'R' && left > 0)return false;
+            if(start[i] == 'L' && right > 0)return false;
+        }else{
             return false;
-        } else if (start[i] == end[i]) {
-            if (start[i] == 'X') continue;
-            if (propagating && propagationChar != start[i]) {
-                return false;
-            }
-        } else {
-            if ((start[i] == 'X' && end[i] == 'R' && propagating)) {
-                propagating = false;
-                if (propagationChar != 'R') return false;
-            } else if ((start[i] == 'L' && end[i] == 'X' && propagating)) {
-                propagating = false;
-                if (propagationChar != 'L') return false;
-            } else {
-                return false;
-            }
         }
     }
-    if (propagating) return false;
-    return true;
+    return ((right==0)&&(left==0));
 }
