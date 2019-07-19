@@ -8,7 +8,11 @@ using namespace std;
  * 
  * - Assgin a variable X starts from the second last index to 0, and sort the list on the right hand side of X
  * - Swap the value which is just bigger than X
- * 
+ *      - It means sort the whole value at the right hand side of X, then pick the value which is just bigger than X
+ *      - Ex: 132 
+ *              sort: [1] 23
+ *              pick the one num bigger than 1: [2] 13
+ *      - We want to make sure the new value has the smallest increment and in accordance with the lexicographical order.
  * Faster than 99%
  */
 
