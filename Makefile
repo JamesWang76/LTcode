@@ -1,4 +1,5 @@
-main:775.cpp
-	g++ -o main 775.cpp -std=c++11
+main:787.cpp
+	g++ -o main 787.cpp -std=c++11
 clear:
 	rm main
+	
