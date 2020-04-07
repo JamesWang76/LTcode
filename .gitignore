@@ -1,4 +1,5 @@
 .vscode
 *.txt
+!attempt.txt
 *.png
 main

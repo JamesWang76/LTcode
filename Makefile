@@ -1,5 +1,6 @@
-main:368.cpp
-	g++ -o main 368.cpp -std=c++11
+main:754.cpp
+	g++ -o main 754.cpp
+.PHONY: clean
 clear:
 	rm main
 	
