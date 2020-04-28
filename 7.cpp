@@ -46,8 +46,8 @@ int reverse(int x) {
     for(int i=digit.size()-1;i>=0;i--){
         cout<<sum + pos*digit[i]<<endl;
         sign_bit = (sum + (unsigned int)pos*digit[i]) >> 31;
-        if (sign_bit != orig_sign)
-            return 0;
+        // if (sign_bit != orig_sign)
+        //     return 0;
         
         // 2147483647
         sum += pos*digit[i];
