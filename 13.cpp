@@ -29,22 +29,22 @@ int romanToInt(string s) {
     
     for(int i=0;i<len;i++){
         it = table.find(s[i]);
-        tmp = it->second;
+        itValue = it->second;
         if(s[i] == 'I'&& i < len-1){
             if(s[i+1] == 'V' || s[i+1] == 'X') 
-                tmp *= -1;
+                itValue *= -1;
         }
 
         else if(s[i] == 'X'&& i < len-1){
             if(s[i+1] == 'L' || s[i+1] == 'C') 
-                tmp *= -1;
+                itValue *= -1;
         }
 
         if(s[i] == 'C'&& i < len-1){
             if(s[i+1] == 'D' || s[i+1] == 'M') 
-                tmp *= -1;
+                itValue *= -1;
         }
-        sum += tmp;
+        sum += itValue;
     }
     return 0;
 }
