@@ -19,7 +19,7 @@ int minSteps(int n);
  */ 
 
 int main(){
-    minSteps(1000);
+    cout<<minSteps(199);
 }
 
 int minSteps(int n) {
